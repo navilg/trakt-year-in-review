@@ -1,0 +1,2 @@
+# trakt-year-in-review
+Generate year in review from Trakt history
