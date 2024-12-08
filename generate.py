@@ -116,25 +116,7 @@ with open("trakt-history-"+year+".json", "w") as file:
     file.write(json.dumps(history, indent=4))
 stats = analyze_history(history)
 
-# Print the results in a structured format
-print({
-    "username": username,
-    "year": 2024,
-    "statistics": {
-        "tv_shows": {
-            "episodes_watched": stats['tv_episodes'],
-            "hours_watched": stats['tv_hours'],
-            "top_genres": [genre for genre, count in stats['top_tv_genres']]
-        },
-        "movies": {
-            "movies_watched": stats['movies'],
-            "hours_watched": stats['movie_hours'],
-            "top_genres": [genre for genre, count in stats['top_movie_genres']]
-        }
-    }
-})
-
-print(stats)
+# print(stats)
 
 year_in_review_stats = {
     "username": username,
