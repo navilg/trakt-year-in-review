@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year in Review {{ year }} - {{ username }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0c0c0c;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background-color: #1a1a1a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        .genres {
+            margin-top: 40px;
+        }
+        .genre-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .genre-item {
+            background-color: #1a1a1a;
+            color: #00ffff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid #00ffff;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Year in Review {{ year }}</h1>
+            <h2>Trakt User: {{ username }}</h2>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>TV Episodes</h3>
+                <div class="stat-value">{{ episodes_count }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>TV Hours</h3>
+                <div class="stat-value">{{ episode_hours }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>Movies</h3>
+                <div class="stat-value">{{ movies_count }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>Movie Hours</h3>
+                <div class="stat-value">{{ movie_hours }}</div>
+                <p>Watched</p>
+            </div>
+        </div>
+        
+        <div class="genres">
+            <h3>Top TV Genres</h3>
+            <div class="genre-list">
+            {% for tv_genre in tv_generes %}
+                <span class="genre-item">{{ tv_genre }}</span>
+            {% endfor %}
+            </div>
+        </div>
+        
+        <div class="genres">
+            <h3>Top Movie Genres</h3>
+            <div class="genre-list">
+            {% for movie_genre in movie_genres %}
+                <span class="genre-item">{{ movie_genre }}</span>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

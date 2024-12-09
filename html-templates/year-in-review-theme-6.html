@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year in Review {{ year }} - {{ username }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-image: repeating-linear-gradient(0deg, #000, #000 2px, #111 2px, #111 4px);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 4px #000, 0 0 0 8px #fff;
+        }
+        h1, h2, h3 {
+            color: #ff00ff;
+            text-shadow: 3px 3px 0 #00ffff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background-color: #111;
+            border: 2px solid #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffff00;
+        }
+        .genres {
+            margin-top: 40px;
+        }
+        .genre-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .genre-item {
+            background-color: #00ffff;
+            color: #000;
+            padding: 5px 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="header">
+    <h1>Year in Review {{ year }}</h1>
+    <h2>Trakt User: {{ username }}</h2>
+    </div>
+
+    <div class="stats-grid">
+    <div class="stat-card">
+        <h3>TV Episodes</h3>
+        <div class="stat-value">{{ episodes_count }}</div>
+        <p>Watched</p>
+    </div>
+    <div class="stat-card">
+        <h3>TV Hours</h3>
+        <div class="stat-value">{{ episode_hours }}</div>
+        <p>Watched</p>
+    </div>
+    <div class="stat-card">
+        <h3>Movies</h3>
+        <div class="stat-value">{{ movies_count }}</div>
+        <p>Watched</p>
+    </div>
+    <div class="stat-card">
+        <h3>Movie Hours</h3>
+        <div class="stat-value">{{ movie_hours }}</div>
+        <p>Watched</p>
+    </div>
+    </div>
+
+    <div class="genres">
+    <h3>Top TV Genres</h3>
+    <div class="genre-list">
+        {% for tv_genre in tv_generes %}
+            <span class="genre-item">{{ tv_genre }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    <div class="genres">
+    <h3>Top Movie Genres</h3>
+    <div class="genre-list">
+        {% for movie_genre in movie_genres %}
+                <span class="genre-item">{{ movie_genre }}</span>
+        {% endfor %}
+    </div>
+    </div>
+    </div>
+</body>
+</html>

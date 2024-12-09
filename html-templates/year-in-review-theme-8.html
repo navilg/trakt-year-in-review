@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year in Review {{ year }} - {{ username }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #000;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background-color: #f4f4f4;
+            border: 1px solid #000;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .genres {
+            margin-top: 40px;
+        }
+        .genre-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .genre-item {
+            background-color: #000;
+            color: #fff;
+            padding: 5px 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Year in Review {{ year }}</h1>
+            <h2>Trakt User: {{ username }}</h2>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>TV Episodes</h3>
+                <div class="stat-value">{{ episodes_count }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>TV Hours</h3>
+                <div class="stat-value">{{ episode_hours }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>Movies</h3>
+                <div class="stat-value">{{ movies_count }}</div>
+                <p>Watched</p>
+            </div>
+            <div class="stat-card">
+                <h3>Movie Hours</h3>
+                <div class="stat-value">{{ movie_hours }}</div>
+                <p>Watched</p>
+            </div>
+        </div>
+        
+        <div class="genres">
+            <h3>Top TV Genres</h3>
+            <div class="genre-list">
+            {% for tv_genre in tv_generes %}
+                <span class="genre-item">{{ tv_genre }}</span>
+            {% endfor %}
+            </div>
+        </div>
+        
+        <div class="genres">
+            <h3>Top Movie Genres</h3>
+            <div class="genre-list">
+            {% for movie_genre in movie_genres %}
+                <span class="genre-item">{{ movie_genre }}</span>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

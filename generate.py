@@ -13,6 +13,8 @@ from rich.panel import Panel
 from rich.layout import Layout
 from rich.align import Align
 
+from jinja2 import Environment, FileSystemLoader
+
 if len(sys.argv) != 3:
     load_dotenv()
 else:
@@ -32,6 +34,7 @@ TRAKT_HEADERS = {
 username = os.getenv('TRAKT_USER')
 
 year=os.getenv('YEAR')
+html_output_dir = 'year-in-review-outputs'
 
 def fetch_trakt_history(username, start_date, end_date):
     url = f"{TRAKT_API_BASE_URL}/users/{username}/history"
@@ -204,6 +207,7 @@ start_date = datetime(int(year), 1, 1)
 end_date = datetime(int(year), 12, 31)
 
 # Fetch and analyze the history
+print("Static HTML year in review page will be stored under", html_output_dir, "directory")
 print('Generating Year in Review for', year+'. It may take few minutes depending on your size of history...')
 print("\n")
 history = fetch_trakt_history(username, start_date, end_date)
@@ -239,7 +243,7 @@ with open("year-in-review-"+str(year)+".json", "w") as file:
 console = Console()
 
 # Heading
-heading = Align.center("[bold magenta]Year in Review "+year+"[/bold magenta]", vertical="middle")
+heading = Align.center("[bold magenta]Year in Review "+year+" | Trakt user: "+username+"[/bold magenta]", vertical="middle")
 
 # Four Cards
 cards_table = Table.grid(expand=True)
@@ -303,3 +307,40 @@ layout.split_column(
 # Print Layout
 console.print(layout)
 
+def create_html_page(username, year, episodes_count, episode_hours, movies_count, movie_hours, tv_generes: list[str], movie_genres: list[str]):
+    templates_dir = 'html-templates'
+
+    # Data for substitution in the templates
+    data = {
+        'username': username,
+        'year': year,
+        'episodes_count': str(episodes_count),
+        'episode_hours': str(episode_hours),
+        'movies_count': str(movies_count),
+        'movie_hours': str(movie_hours),
+        'tv_generes': tv_generes,
+        'movie_genres': movie_genres
+    }
+
+    # Create the Jinja2 Environment to load templates
+    j2env = Environment(loader=FileSystemLoader(templates_dir))
+
+    # Get all template files from the templates directory
+    template_files = [f for f in os.listdir(templates_dir) if f.endswith('.html')]
+
+    # Iterate over each template file
+    for template_file in template_files:
+        # Load the template file
+        template = j2env.get_template(template_file)
+        
+        # Render the template with the data
+        rendered_content = template.render(data)
+        
+        # Define the output file path (create corresponding output files)
+        output_file_path = os.path.join(html_output_dir, template_file)
+        
+        # Write the rendered content to a new file in the output directory
+        with open(output_file_path, 'w') as output_file:
+            output_file.write(rendered_content)
+
+create_html_page(username, year, stats['tv_episodes'], stats['tv_hours'], stats['movies'], stats['movie_hours'], [genre for genre, count in stats['top_tv_genres']], [genre for genre, count in stats['top_movie_genres']])

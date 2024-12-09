@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 
 *.json
+year-in-review-outputs/*.html
