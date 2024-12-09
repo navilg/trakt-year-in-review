@@ -202,7 +202,6 @@ def analyze_history(history):
         'movies_average_rating': round(movie_ratings/movies,1)
     }
 
-# Set the date range for 2024
 start_date = datetime(int(year), 1, 1)
 end_date = datetime(int(year), 12, 31)
 
@@ -219,7 +218,7 @@ stats = analyze_history(history)
 
 year_in_review_stats = {
     "username": username,
-    "year": 2024,
+    "year": year,
     "statistics": {
         "tv_shows": {
             "episodes_watched": stats['tv_episodes'],
