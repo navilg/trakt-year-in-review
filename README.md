@@ -1,24 +1,26 @@
-# trakt-year-in-review
+# Year in Review using Trakt
 
 Generate year in review from Trakt history
 
 ## Steps
 
-1. Create `.env` file from `.env.example` file
+1. Make your Trakt profile as public from Trakt's account setting.
+
+2. Create `.env` file from `.env.example` file
 
 ```bash
 cp .env.example .env
 ```
 
-2. Update trakt user name, trakt client id and year in `.env` file
+3. Update trakt user name, trakt client id and year in `.env` file
 
-3. Run below command on full terminal screen
+4. Run below command on full terminal screen
 
 ```bash
 python generate.py
 ```
 
-4. Alternatively, You can also pass trakt user name, year and client id in command line argument
+5. Alternatively, You can also pass trakt user name, year and client id in command line argument
 
 ```bash
 python generate.py user_id 2024 trakt_client_id
