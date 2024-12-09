@@ -41,13 +41,52 @@ def fetch_trakt_history(username, start_date, end_date):
         'limit': 10000  # Adjust as needed
     }
     response = requests.get(url, headers=TRAKT_HEADERS, params=params)
-    return response.json()
+    
+    if response.status_code == 401:
+        print("Status Code 401: Unauthorized - OAuth must be provided or profile must be public")
+        exit(401)
+    if response.status_code == 403:
+        print("Status Code 403: Forbidden - invalid API key or unapproved app")
+        exit(403)
+    if response.status_code == 420:
+        print("Status Code 420: Account Limit Exceeded")
+        exit(420)
+    if response.status_code == 426:
+        print("Status Code 426: VIP Only - user must upgrade to VIP")
+        exit(426)
+    if response.status_code == 429:
+        print("Status Code 429: Rate Limit Exceeded")
+        exit(426)
+    if 500 <= response.status_code < 600:
+        print("Status Code", response.status_code+": Service Unavailable")
+        exit(response.status_code)
+    if response.status_code == 200:
+        return response.json()
 
 def get_movie_details(id):
     url = f"{TRAKT_API_BASE_URL}/movies/{id}"
     params = {'extended': 'full'}
     response = requests.get(url, headers=TRAKT_HEADERS, params=params)
-    data = response.json()
+    if response.status_code == 401:
+        print("Status Code 401: Unauthorized - OAuth must be provided or profile must be public")
+        exit(401)
+    if response.status_code == 403:
+        print("Status Code 403: Forbidden - invalid API key or unapproved app")
+        exit(403)
+    if response.status_code == 420:
+        print("Status Code 420: Account Limit Exceeded")
+        exit(420)
+    if response.status_code == 426:
+        print("Status Code 426: VIP Only - user must upgrade to VIP")
+        exit(426)
+    if response.status_code == 429:
+        print("Status Code 429: Rate Limit Exceeded")
+        exit(426)
+    if 500 <= response.status_code < 600:
+        print("Status Code", response.status_code+": Service Unavailable")
+        exit(response.status_code)
+    if response.status_code == 200:
+        data = response.json()
 
     return data.get('runtime', 0), data.get('genres', []), data.get('rating', 0)
 
@@ -55,12 +94,52 @@ def get_episode_details(show_id, season_number, episode_number):
     url = f"{TRAKT_API_BASE_URL}/shows/{show_id}/seasons/{season_number}/episodes/{episode_number}"
     params = {'extended': 'full'}
     response = requests.get(url, headers=TRAKT_HEADERS, params=params)
-    data = response.json()
+
+    if response.status_code == 401:
+        print("Status Code 401: Unauthorized - OAuth must be provided or profile must be public")
+        exit(401)
+    if response.status_code == 403:
+        print("Status Code 403: Forbidden - invalid API key or unapproved app")
+        exit(403)
+    if response.status_code == 420:
+        print("Status Code 420: Account Limit Exceeded")
+        exit(420)
+    if response.status_code == 426:
+        print("Status Code 426: VIP Only - user must upgrade to VIP")
+        exit(426)
+    if response.status_code == 429:
+        print("Status Code 429: Rate Limit Exceeded")
+        exit(426)
+    if 500 <= response.status_code < 600:
+        print("Status Code", response.status_code+": Service Unavailable")
+        exit(response.status_code)
+    if response.status_code == 200:
+        data = response.json()
 
     show_details_url = f"{TRAKT_API_BASE_URL}/shows/{show_id}"
     params = {'extended': 'full'}
     show_detail_response = requests.get(show_details_url, headers=TRAKT_HEADERS, params=params)
-    show_detail_data = show_detail_response.json()
+
+    if show_detail_response.status_code == 401:
+        print("Status Code 401: Unauthorized - OAuth must be provided or profile must be public")
+        exit(401)
+    if show_detail_response.status_code == 403:
+        print("Status Code 403: Forbidden - invalid API key or unapproved app")
+        exit(403)
+    if show_detail_response.status_code == 420:
+        print("Status Code 420: Account Limit Exceeded")
+        exit(420)
+    if show_detail_response.status_code == 426:
+        print("Status Code 426: VIP Only - user must upgrade to VIP")
+        exit(426)
+    if show_detail_response.status_code == 429:
+        print("Status Code 429: Rate Limit Exceeded")
+        exit(426)
+    if 500 <= show_detail_response.status_code < 600:
+        print("Status Code", response.status_code+": Service Unavailable")
+        exit(response.status_code)
+    if show_detail_response.status_code == 200:
+        show_detail_data = show_detail_response.json()
 
     return data.get('runtime', 0), show_detail_data.get('genres', []), data.get('rating', 0)
 
