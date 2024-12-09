@@ -207,7 +207,7 @@ end_date = datetime(int(year), 12, 31)
 
 # Fetch and analyze the history
 print("Static HTML year in review page will be stored under", html_output_dir, "directory")
-print('Generating Year in Review for', year+'. It may take few minutes depending on your size of history...')
+print('Generating Year in Review for', year+'. It may take few minutes depending on size of your watch history...')
 print("\n")
 history = fetch_trakt_history(username, start_date, end_date)
 with open("trakt-history-"+year+".json", "w") as file:
