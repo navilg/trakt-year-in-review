@@ -26,6 +26,8 @@ python generate.py
 python generate.py user_id 2024 trakt_client_id
 ```
 
+6. Make your Trakt profile as private again from Trakt's account setting.
+
 ## Screenshots
 
 ![](Screenshot.png)
