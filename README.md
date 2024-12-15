@@ -4,7 +4,7 @@ Generate year in review from Trakt history
 
 ## Requirements
 
-Python 3.12.3
+Python 3.12+
 
 ## Steps
 
