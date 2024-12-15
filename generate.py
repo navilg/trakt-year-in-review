@@ -32,7 +32,6 @@ TRAKT_HEADERS = {
 username = os.getenv('TRAKT_USER')
 
 year=os.getenv('YEAR')
-html_output_dir = 'year-in-review-outputs'
 
 def fetch_trakt_history(username, start_date, end_date):
     url = f"{TRAKT_API_BASE_URL}/users/{username}/history"
@@ -210,8 +209,8 @@ start_date = datetime(int(year), 1, 1)
 end_date = datetime(int(year), 12, 31)
 
 # Fetch and analyze the history
-print("Static HTML year in review page will be stored under", html_output_dir, "directory")
 print('Generating Year in Review for', year+'. It may take few minutes depending on size of your watch history...')
+print('Maximum 180 movies/episodes are analyzed in 1 minute to honor trakt api rate limit.')
 print("\n")
 history = fetch_trakt_history(username, start_date, end_date)
 with open("trakt-history-"+year+".json", "w") as file:
