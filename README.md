@@ -2,6 +2,10 @@
 
 Generate year in review from Trakt history
 
+## Requirements
+
+Python 3.12.3
+
 ## Steps
 
 0. Install required python modules
@@ -10,7 +14,7 @@ Generate year in review from Trakt history
 pip install -r requirements.txt
 ```
 
-1. Make your Trakt profile as public from Trakt's account setting.
+1. Make your Trakt profile as public from Trakt's account setting (Make it private again after generating year in review)
 
 2. Create `.env` file from `.env.example` file
 
