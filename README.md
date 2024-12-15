@@ -4,6 +4,12 @@ Generate year in review from Trakt history
 
 ## Steps
 
+0. Install required python modules
+
+```bash
+pip install -r requirements.txt
+```
+
 1. Make your Trakt profile as public from Trakt's account setting.
 
 2. Create `.env` file from `.env.example` file
@@ -30,4 +36,7 @@ python generate.py user_id 2024 trakt_client_id
 
 ## Screenshots
 
-![](Screenshot.png)
+![](Screenshot-1.png)
+
+
+![](Screenshot-2.png)
