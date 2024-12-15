@@ -147,11 +147,11 @@ def get_episode_details(show_id, season_number, episode_number):
     return data.get('runtime', 0), show_detail_data.get('genres', []), data.get('rating', 0)
 
 def analyze_history(history):
-    tv_episodes = 0
+    tv_shows = {} # {tvshowid: countofplay}
     tv_minutes = 0
     tv_ratings = 0
     tv_genres = Counter()
-    movies = 0
+    movies = {} # {movieid: countofplay}
     movie_minutes = 0
     movie_ratings = 0
     movie_genres = Counter()
@@ -159,8 +159,11 @@ def analyze_history(history):
 
     for item in history:
         if item['type'] == 'episode':
-            tv_episodes += 1
             show_id = item['show'].get('ids', {}).get('trakt')
+            if show_id in tv_shows:
+                tv_shows[show_id] += 1
+            else:
+                tv_shows[show_id] = 1
             season_number = item['episode']['season']
             episode_number = item['episode']['number']
             if show_id:
@@ -173,8 +176,11 @@ def analyze_history(history):
             genre_list = genres
             tv_genres.update(genre_list)
         elif item['type'] == 'movie':
-            movies += 1
             id = item['movie'].get('ids', {}).get('trakt')
+            if id in movies:
+                movies[id] += 1
+            else:
+                movies[id] = 1
             if id:
                 runtime, genres, rating = get_movie_details(id)
                 try:
@@ -186,20 +192,22 @@ def analyze_history(history):
             movie_genres.update(genre_list)
         loop_count += 1
         if loop_count > 99:
+            print("Pausing for 10 seconds to maintain rate limit on Trakt API...")
             sleep(10) # To make sure API call rate for Trakt is not breached. It waits for 10 seconds every 100th call
+            print("Generating...")
             loop_count = 0
 
     return {
-        'tv_episodes': tv_episodes,
+        'tv_shows': len(tv_shows),
         'tv_hours': round(tv_minutes / 60, 2),
         'top_tv_genres': tv_genres.most_common(5),
         'tv_genres_total_count': sum(tv_genres.values()),
-        'episodes_average_rating': round(tv_ratings/tv_episodes, 1),
-        'movies': movies,
+        'episodes_average_rating': round(tv_ratings/sum(tv_shows.values()), 1),
+        'movies': len(movies),
         'movie_hours': round(movie_minutes / 60, 2),
         'top_movie_genres': movie_genres.most_common(5),
         'movie_genres_total_count': sum(movie_genres.values()),
-        'movies_average_rating': round(movie_ratings/movies,1)
+        'movies_average_rating': round(movie_ratings/sum(movies.values()),1)
     }
 
 start_date = datetime(int(year), 1, 1)
@@ -221,7 +229,7 @@ year_in_review_stats = {
     "year": year,
     "statistics": {
         "tv_shows": {
-            "episodes_watched": stats['tv_episodes'],
+            "shows_watched": stats['tv_shows'],
             "hours_watched": stats['tv_hours'],
             "average_rating": stats['episodes_average_rating'],
             "top_genres": [genre for genre, count in stats['top_tv_genres']]
@@ -257,8 +265,8 @@ cards_table.add_row(
     Panel("Movies Watched\n\n[bold cyan]"+str(stats['movies'])+"[/bold cyan]", border_style="cyan"),
     Panel("Movies Hours\n\n[bold green]"+str(stats['movie_hours'])+"[/bold green]", border_style="green"),
     Panel("Movies Avg Rating\n\n[bold blue]"+str(stats['movies_average_rating'])+"[/bold blue]", border_style="blue"),
-    Panel("TV Episodes Watched\n\n[bold cyan]"+str(stats['tv_episodes'])+"[/bold cyan]", border_style="cyan"),
-    Panel("TV Episodes Hours\n\n[bold green]"+str(stats['tv_hours'])+"[/bold green]", border_style="green"),
+    Panel("TV Shows Watched\n\n[bold cyan]"+str(stats['tv_shows'])+"[/bold cyan]", border_style="cyan"),
+    Panel("Episode Hours\n\n[bold green]"+str(stats['tv_hours'])+"[/bold green]", border_style="green"),
     Panel("Episodes Avg Rating\n\n[bold blue]"+str(stats['episodes_average_rating'])+"[/bold blue]", border_style="blue")
 )
 
@@ -342,4 +350,4 @@ def create_html_page(username, year, episodes_count, episode_hours, movies_count
         with open(output_file_path, 'w') as output_file:
             output_file.write(rendered_content)
 
-create_html_page(username, year, stats['tv_episodes'], stats['tv_hours'], stats['movies'], stats['movie_hours'], [genre for genre, count in stats['top_tv_genres']], [genre for genre, count in stats['top_movie_genres']])
+create_html_page(username, year, stats['tv_shows'], stats['tv_hours'], stats['movies'], stats['movie_hours'], [genre for genre, count in stats['top_tv_genres']], [genre for genre, count in stats['top_movie_genres']])
