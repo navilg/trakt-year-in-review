@@ -189,10 +189,8 @@ def analyze_history(history):
             genre_list = genres
             movie_genres.update(genre_list)
         loop_count += 1
-        if loop_count > 99:
-            print("Pausing for 10 seconds to maintain rate limit on Trakt API...")
-            sleep(10) # To make sure API call rate for Trakt is not breached. It waits for 10 seconds every 100th call
-            print("Generating...")
+        if loop_count >= 3:
+            sleep(1) # To make sure API call rate for Trakt is not breached (1000 calls every 5 minutes). It waits for 1 seconds after ecery 3rd call (max 180 calls in a minute)
             loop_count = 0
 
     return {
