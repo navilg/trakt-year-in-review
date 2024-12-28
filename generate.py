@@ -227,7 +227,6 @@ def fetch_stats_from_local():
 
 def fetch_stats_from_trakt():
     # Fetch and analyze the history
-    print("\n")
     print(f"Preparing your Year in Review for {year}. This might take a few minutes, depending on the size of your watch history...")
     print("Note: Up to 180 movies/episodes are processed per minute to comply with Trakt API rate limits.")
     print("\n")
@@ -276,6 +275,7 @@ if not os.path.exists("year-in-review-"+str(year)+".json"):
     fetch_stats_from_trakt()
 else:
     use_local_stat = input(f"Local statistics for {year} are available. Would you like to use them? \nSelecting this will use locally stored data and skip importing the latest data from Trakt. (y/N): ")
+    print("\n")
     if use_local_stat == "y" or use_local_stat == "Y":
         stats = fetch_stats_from_local()
     else:
