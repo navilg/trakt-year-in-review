@@ -228,9 +228,10 @@ def fetch_stats_from_local():
 def fetch_stats_from_trakt():
     # Fetch and analyze the history
     print("\n")
-    print('Generating Year in Review for', year+'. It may take few minutes depending on size of your watch history...')
-    print('Maximum 180 movies/episodes are analyzed in 1 minute to honor trakt api rate limit.')
+    print(f"Preparing your Year in Review for {year}. This might take a few minutes, depending on the size of your watch history...")
+    print("Note: Up to 180 movies/episodes are processed per minute to comply with Trakt API rate limits.")
     print("\n")
+
     history = fetch_trakt_history(username, start_date, end_date)
     with open("trakt-history-"+year+".json", "w") as file:
         file.write(json.dumps(history, indent=4))
@@ -284,7 +285,7 @@ else:
 console = Console()
 
 # Heading
-heading = Align.center("[bold magenta]Year in Review "+year+" | Trakt user: "+username+"[/bold magenta]", vertical="middle")
+heading = Align.center(f"[bold magenta]Year in Review {year} | Trakt user: {username}[/bold magenta]", vertical="middle")
 
 # Four Cards
 cards_table = Table.grid(expand=True)
@@ -296,12 +297,12 @@ cards_table.add_column(justify="center", ratio=1)
 cards_table.add_column(justify="center", ratio=1)
 
 cards_table.add_row(
-    Panel("Movies Watched\n\n[bold cyan]"+str(stats['movies'])+"[/bold cyan]", border_style="cyan"),
-    Panel("Movies Hours\n\n[bold green]"+str(stats['movie_hours'])+"[/bold green]", border_style="green"),
-    Panel("Movies Avg Rating\n\n[bold blue]"+str(stats['movies_average_rating'])+"[/bold blue]", border_style="blue"),
-    Panel("TV Shows Watched\n\n[bold cyan]"+str(stats['tv_shows'])+"[/bold cyan]", border_style="cyan"),
-    Panel("Episode Hours\n\n[bold green]"+str(stats['tv_hours'])+"[/bold green]", border_style="green"),
-    Panel("Episodes Avg Rating\n\n[bold blue]"+str(stats['episodes_average_rating'])+"[/bold blue]", border_style="blue")
+    Panel(f"Movies Watched\n\n[bold cyan]{stats['movies']}[/bold cyan]", border_style="cyan"),
+    Panel(f"Movie Hours\n\n[bold green]{stats['movie_hours']}[/bold green]", border_style="green"),
+    Panel(f"Movies Avg Rating\n\n[bold blue]{stats['movies_average_rating']}[/bold blue]", border_style="blue"),
+    Panel(f"TV Shows Watched\n\n[bold cyan]{stats['tv_shows']}[/bold cyan]", border_style="cyan"),
+    Panel(f"Episode Hours\n\n[bold green]{stats['tv_hours']}[/bold green]", border_style="green"),
+    Panel(f"Episodes Avg Rating\n\n[bold blue]{stats['episodes_average_rating']}[/bold blue]", border_style="blue")
 )
 
 
