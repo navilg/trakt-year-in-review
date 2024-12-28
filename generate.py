@@ -205,41 +205,80 @@ def analyze_history(history):
         'movies_average_rating': round(movie_ratings/sum(movies.values()),1)
     }
 
+def fetch_stats_from_local():
+    with open("year-in-review-"+str(year)+".json", "r") as file:
+        data = json.load(file)
+    
+    tv_shows = data["statistics"]["tv_shows"]
+    movies = data["statistics"]["movies"]
+
+    return {
+        'tv_shows': tv_shows["shows_watched"],
+        'tv_hours': tv_shows["hours_watched"],
+        'top_tv_genres': tv_shows["top_genres"],
+        'tv_genres_total_count': tv_shows["tv_genres_total_count"],
+        'episodes_average_rating': tv_shows["episodes_average_rating"],
+        'movies': movies["movies_watched"],
+        'movie_hours': movies["hours_watched"],
+        'top_movie_genres': movies["top_genres"],
+        'movie_genres_total_count': movies["movie_genres_total_count"],
+        'movies_average_rating': movies["movies_average_rating"]
+    }
+
+def fetch_stats_from_trakt():
+    # Fetch and analyze the history
+    print("\n")
+    print('Generating Year in Review for', year+'. It may take few minutes depending on size of your watch history...')
+    print('Maximum 180 movies/episodes are analyzed in 1 minute to honor trakt api rate limit.')
+    print("\n")
+    history = fetch_trakt_history(username, start_date, end_date)
+    with open("trakt-history-"+year+".json", "w") as file:
+        file.write(json.dumps(history, indent=4))
+
+    trakt_stat = analyze_history(history)
+
+    # print(stats)
+
+    year_in_review_stats = {
+        "username": username,
+        "year": year,
+        "statistics": {
+            "tv_shows": {
+                "shows_watched": trakt_stat['tv_shows'],
+                "hours_watched": trakt_stat['tv_hours'],
+                "average_rating": trakt_stat['episodes_average_rating'],
+                "top_genres": trakt_stat['top_tv_genres'],
+                "tv_genres_total_count": trakt_stat["tv_genres_total_count"],
+                "episodes_average_rating": trakt_stat["episodes_average_rating"]
+            },
+            "movies": {
+                "movies_watched": trakt_stat['movies'],
+                "hours_watched": trakt_stat['movie_hours'],
+                "average_rating": trakt_stat['movies_average_rating'],
+                "top_genres": trakt_stat['top_movie_genres'],
+                "movie_genres_total_count": trakt_stat["movie_genres_total_count"],
+                "movies_average_rating": trakt_stat["movies_average_rating"]
+
+            }
+        }
+    }
+
+    with open(f"year-in-review-"+str(year)+".json", "w") as file:
+        file.write(json.dumps(year_in_review_stats, indent=4))
+
+    return trakt_stat
+
 start_date = datetime(int(year), 1, 1)
 end_date = datetime(int(year), 12, 31)
 
-# Fetch and analyze the history
-print('Generating Year in Review for', year+'. It may take few minutes depending on size of your watch history...')
-print('Maximum 180 movies/episodes are analyzed in 1 minute to honor trakt api rate limit.')
-print("\n")
-history = fetch_trakt_history(username, start_date, end_date)
-with open("trakt-history-"+year+".json", "w") as file:
-    file.write(json.dumps(history, indent=4))
-stats = analyze_history(history)
-
-# print(stats)
-
-year_in_review_stats = {
-    "username": username,
-    "year": year,
-    "statistics": {
-        "tv_shows": {
-            "shows_watched": stats['tv_shows'],
-            "hours_watched": stats['tv_hours'],
-            "average_rating": stats['episodes_average_rating'],
-            "top_genres": [genre for genre, count in stats['top_tv_genres']]
-        },
-        "movies": {
-            "movies_watched": stats['movies'],
-            "hours_watched": stats['movie_hours'],
-            "average_rating": stats['movies_average_rating'],
-            "top_genres": [genre for genre, count in stats['top_movie_genres']]
-        }
-    }
-}
-
-with open("year-in-review-"+str(year)+".json", "w") as file:
-    file.write(json.dumps(year_in_review_stats, indent=4))
+if not os.path.exists("year-in-review-"+str(year)+".json"):
+    fetch_stats_from_trakt()
+else:
+    use_local_stat = input(f"Local statistics for {year} are available. Would you like to use them? \nSelecting this will use locally stored data and skip importing the latest data from Trakt. (y/N): ")
+    if use_local_stat == "y" or use_local_stat == "Y":
+        stats = fetch_stats_from_local()
+    else:
+        stats = fetch_stats_from_trakt()
 
 # Initialize Console
 console = Console()
